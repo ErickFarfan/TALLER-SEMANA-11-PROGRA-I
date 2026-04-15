@@ -1,0 +1,76 @@
+name: Autograding Tests
+
+on:
+  - push
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Constructor
+        id: constructor
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Constructor
+          setup-command: ""
+          command: mvn -q -Dtest=ConstructorTest test
+          timeout: 10
+          max-score: 20
+
+      - name: Getters y Setters
+        id: getters-setters
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Getters y Setters
+          setup-command: ""
+          command: mvn -q -Dtest=GettersSettersTest test
+          timeout: 10
+          max-score: 20
+
+      - name: Agregar Stock
+        id: agregar-stock
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Agregar Stock
+          setup-command: ""
+          command: mvn -q -Dtest=AgregarStockTest test
+          timeout: 10
+          max-score: 20
+
+      - name: Vender
+        id: vender
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Vender
+          setup-command: ""
+          command: mvn -q -Dtest=VenderTest test
+          timeout: 10
+          max-score: 25
+
+      - name: Calcular Valor Inventario
+        id: calcular-valor
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Calcular Valor Inventario
+          setup-command: ""
+          command: mvn -q -Dtest=CalcularValorInventarioTest test
+          timeout: 10
+          max-score: 15
